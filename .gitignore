@@ -1,7 +1,5 @@
-coverage
-
-# Build result
-lib
+# Test results
+/coverage
 
 # Node modules
-node_modules
+/node_modules

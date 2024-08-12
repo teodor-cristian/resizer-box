@@ -1,9 +1,15 @@
 {
   "name": "resizer-box",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "author": "Teo <teodor.cristian.s@gmail.com>",
+  "license": "MIT",
+  "description": "The resizer-box is a web component that helps you resize any HTML element in any direction you want.",
   "type": "module",
-  "main": "index.js",
+  "main": "./lib/resizer-box.min.js",
+  "keywords": ["resizer-box", "resizer", "resize", "drag"],
+  "repository": {
+    "url": "https://github.com/teodor-cristian/resizer-box"
+  },
   "scripts": {
     "start:wds": "web-dev-server --open demo/ --node-resolve --watch",
     "start": "live-server --open=./demo --port=3003 --cors",
@@ -19,8 +25,6 @@
     "lint:eslint": "eslint ./src/**",
     "format:prettier": "prettier \"**/*.{mjs,js,md,mdx,json}\" \"**/package.json\" --write --ignore-path .lintignore"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@chromatic-com/storybook": "^1.5.0",
     "@eslint/js": "^9.8.0",
