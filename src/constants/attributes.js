@@ -1,0 +1,16 @@
+export default {
+  WIDTH: "width",
+  HEIGHT: "height",
+  MAX_WIDTH: "max-width",
+  MIN_WIDTH: "min-width",
+  MAX_HEIGHT: "max-height",
+  MIN_HEIGHT: "min-height",
+  RESIZE_RIGHT: "resize-right",
+  RESIZE_BOTTOM: "resize-bottom",
+  RESIZE_TOP: "resize-top",
+  RESIZE_LEFT: "resize-left",
+  RESIZE_BOTTOM_RIGHT: "resize-bottom-right",
+  RESIZE_BOTTOM_LEFT: "resize-bottom-left",
+  RESIZE_TOP_LEFT: "resize-top-left",
+  RESIZE_TOP_RIGHT: "resize-top-right",
+};

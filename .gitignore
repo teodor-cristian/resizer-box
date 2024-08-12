@@ -1,0 +1,7 @@
+coverage
+
+# Build result
+lib
+
+# Node modules
+node_modules
