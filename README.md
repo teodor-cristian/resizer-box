@@ -15,6 +15,14 @@ This is a web component written in vanilla js without any external dependencies.
 
 You can test it here: link
 
+## Install
+#### Import in Browser ( Recommend )
+Use the script tag and the src from unpkg with the latest version. Being a web component, once you add the script it will be automatically created and you can start using it.
+
+```html
+<script type="module" src="https://unpkg.com/resizer-box@latest/lib/resizer-box.min.js"></script>
+```
+
 ## Usage
 
 ```html
