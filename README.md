@@ -13,7 +13,7 @@ This is a web component written in vanilla js without any external dependencies.
 
 ## Demo
 
-You can test it here: link
+You can test it here: [demo](https://teodor-cristian.github.io/resizer-box/)
 
 ## Install
 #### Import in Browser ( Recommend )
@@ -32,7 +32,7 @@ Use the script tag and the src from unpkg with the latest version. Being a web c
     resize-right
 >
     <div class="myBox" slot="content">
-        <img src="https://www.w3schools.com/html/pic_trulli.jpg" alt="Trulli" width="500" height="333">
+        <img src="./assets/demo-img.jpg" alt="demo-img" width="400" height="400">
         <h1>Test 123</h1>
         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
     </div>
@@ -77,7 +77,8 @@ resizeBox.addEventListener("resize", (e) => {
 ```
 ## Styling
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![default styles img](./demo/assets/default-style.gif)
+
 
 By default all the handles come with a default width and color on hover.
 
