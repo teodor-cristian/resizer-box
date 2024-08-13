@@ -1,0 +1,51 @@
+html {
+    height: 100%;
+    /* overflow: hidden; */
+}
+
+body {
+    height: 100%;
+    margin: 0px;
+}
+
+::-webkit-scrollbar { display: none;}
+
+.dimensions-container label {
+    display: block;
+}
+
+.dimensions-container {
+    margin-left: auto;
+}
+
+.myBox {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    box-shadow: inset 0 0 1px #000;
+}
+
+.resizer-demo-container {
+    display: flex;
+    height: 100%;
+}
+
+.settings-container {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 12px;
+}
+
+fieldset.resizer-options {
+    display: flex;
+    gap: 20px;
+}
+
+.limitations-container label {
+    display: block;
+}
+
+.limitations-fieldset {
+    display: flex;
+    gap: 20px;
+}
