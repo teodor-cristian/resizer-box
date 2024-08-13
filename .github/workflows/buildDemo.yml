@@ -1,0 +1,30 @@
+name: "🏗️ Build and Deploy Demo"
+
+on:
+    push:
+        branches:
+            - main
+
+permissions:
+  contents: write
+
+jobs:
+    release:
+        name: 🏗️ Build and Deploy Demo
+        runs-on: ubuntu-latest
+        steps:
+            - name: 📚 checkout
+              uses: actions/checkout@v4.1.7
+            - name: 🟢 node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 21.7.1
+                  registry-url: https://registry.npmjs.org
+            - name: Install and Build 🔧
+              run: |
+                npm i
+                npm run build:demo
+            - name: Deploy 🚀
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  folder: demo-build

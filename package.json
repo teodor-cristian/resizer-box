@@ -1,12 +1,17 @@
 {
   "name": "resizer-box",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Teo <teodor.cristian.s@gmail.com>",
   "license": "MIT",
   "description": "The resizer-box is a web component that helps you resize any HTML element in any direction you want.",
   "type": "module",
   "main": "./lib/resizer-box.min.js",
-  "keywords": ["resizer-box", "resizer", "resize", "drag"],
+  "keywords": [
+    "resizer-box",
+    "resizer",
+    "resize",
+    "drag"
+  ],
   "repository": {
     "url": "https://github.com/teodor-cristian/resizer-box"
   },
@@ -14,7 +19,9 @@
     "start:wds": "web-dev-server --open demo/ --node-resolve --watch",
     "start": "live-server --open=./demo --port=3003 --cors",
     "start:build": "live-server --open=./lib --port=3003 --cors",
+    "start:demo:build": "live-server --open=./demo-build --port=3007 --cors",
     "build": "rollup -c rollup.conf.mjs",
+    "build:demo": "rollup -c rollup-demo.conf.mjs",
     "test": "karma start karma.conf.cjs",
     "test:init": "karma init",
     "storybook": "storybook dev -p 6006 ./src",
@@ -37,6 +44,7 @@
     "@storybook/web-components": "^8.1.9",
     "@storybook/web-components-webpack5": "^8.1.9",
     "@web/dev-server": "^0.4.6",
+    "@web/rollup-plugin-html": "^2.3.0",
     "cypress": "^13.13.0",
     "eslint": "^9.8.0",
     "globals": "^15.9.0",
