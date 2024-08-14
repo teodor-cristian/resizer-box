@@ -1,7 +1,8 @@
 
 # resizer-box
+![demo img](./demo/assets/demo.gif)
 
-The `resizer-box` is a web component that helps you resize any HTML element in any direction you want.
+`resizer-box` is a web component that helps you resize any HTML element in any direction you want.
 
 
 
@@ -84,13 +85,16 @@ By default all the handles come with a default width and color on hover.
 
 You can style all the handles by using the CSS **::part** pseudo-element.
 
+![custom styles img](./demo/assets/custom-style.gif)
+
+
 ```css
 resizer-box::part(handle):hover {
-  background-color: black;
+  background-color: blueviolet;
 }
 
 resizer-box::part(handle-bottom):hover {
-  background-color: pink;
+  background-color: green;
 }
 
 resizer-box::part(handle-bottom-left):hover {
