@@ -1,52 +1,56 @@
-<!DOCTYPE html><html><head>
-        <title>Resizer</title>
+<!DOCTYPE html><html lang="en"><head>
+        <title>resizer-box - web-component library that helps you resize HTML components</title>
+        <meta name="description" content="resizer-box library allows users to resize HTML elements by dragging their edges or corners">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         
-        <script src="assets/index-BxV7zV-T.js" defer=""></script>
-        <link rel="stylesheet" href="assets/styles-Bpmiw6DY.css">
+        <script src="assets/index-D0VyOByx.js" defer=""></script>
+        <link rel="stylesheet" href="assets/styles-DJAc6rI8.css">
+        <link rel="canonical" href="https://teodor-cristian.github.io/resizer-box/">
+
     </head>
     <body>
         <section class="settings-container">
 
-            <fieldset>
-                <legend>Select a vertical alignment:</legend>
-              
-                <div>
-                  <input onchange="handleVerticalChange(this)" type="radio" id="top" name="vertical" value="top" checked="">
-                  <label for="top">top</label>
-                </div>
-              
-                <div>
-                  <input onchange="handleVerticalChange(this)" type="radio" id="middle" name="vertical" value="middle">
-                  <label for="middle">middle</label>
-                </div>
-              
-                <div>
-                  <input onchange="handleVerticalChange(this)" type="radio" id="bottom" name="vertical" value="bottom">
-                  <label for="bottom">bottom</label>
-                </div>
-            </fieldset>
+          <div class="description">
+            <div class="title-container">
+              <h1>resizer-box</h1>
+              <div class="links">
+                <a href="https://github.com/teodor-cristian/resizer-box" target="_blank">
+                  <img src="assets/github-mark-BwyJR_2w.svg" alt="github-logo" width="28" height="28">
+                </a>
+                <a href="https://www.npmjs.com/package/resizer-box" target="_blank">
+                  <img src="assets/npm-logo-black-D9FLGXxn.svg" alt="npm-logo" width="46">
+                </a>
+              </div>
+            </div>
+            <p>The resizer-box library is an npm package that provides a simple, lightweight tool for adding resizable elements to web pages. It allows users to resize HTML elements like divs or images by dragging their edges or corners.</p>
+          </div>
 
-            <fieldset>
-                <legend>Select a horizontal alignment:</legend>
-              
-                <div>
-                  <input onchange="handleHorizontalChange(this)" type="radio" id="left" name="horizontal" value="left" checked="">
-                  <label for="left">left</label>
-                </div>
-              
-                <div>
-                  <input onchange="handleHorizontalChange(this)" type="radio" id="center" name="horizontal" value="center">
-                  <label for="center">center</label>
-                </div>
-              
-                <div>
-                  <input onchange="handleHorizontalChange(this)" type="radio" id="right" name="horizontal" value="right">
-                  <label for="right">right</label>
-                </div>
-            </fieldset>
+          <div class="divider"></div>
 
-            <fieldset class="resizer-options">
-              <legend>Select resize options:</legend>
+          <fieldset class="box-position">
+            <legend>Box position</legend>
+
+            <label for="vertical">Vertical:</label>
+            <select name="vertical" id="vertical" onchange="handleVerticalChange(this)">
+              <option value="top">top</option>
+              <option value="middle">middle</option>
+              <option value="bottom">bottom</option>
+            </select>
+
+            <label for="horizontal">Horizontal:</label>
+            <select name="horizontal" id="horizontal" onchange="handleHorizontalChange(this)">
+              <option value="left">left</option>
+              <option value="center">center</option>
+              <option value="right">right</option>
+            </select>
+          </fieldset>
+
+          <div class="divider"></div>
+
+          <fieldset class="resizer-options">
+              <legend>Resize options</legend>
             
               <div>
                 <div>
@@ -95,7 +99,7 @@
           </fieldset>
 
           <fieldset class="limitations-fieldset">
-            <legend>Select limitation:</legend>
+            <legend>Limitations</legend>
 
             <div class="limitations-container">
               <label for="max-width">Max-width</label>
@@ -114,13 +118,15 @@
             </div>
           </fieldset>
 
-          <div class="dimensions-container">
+          <fieldset class="dimensions-container">
+            <legend>Dimensions</legend>
+
             <label for="width">Width</label>
             <input type="number" id="width" name="width" value="10">
 
             <label for="height">Height</label>
             <input type="number" id="height" name="height" value="10">
-          </div>
+          </fieldset>
 
         </section>
 
@@ -128,7 +134,7 @@
             <resizer-box width="300px" height="200px" resize-right="" resize-left="" resize-bottom="" resize-top="" resize-bottom-right="" resize-bottom-left="" resize-top-left="" resize-top-right="">
                 <div class="myBox" slot="content">
                     <img src="assets/demo-img-BQjjn8Ty.jpg" alt="demo-img" width="400" height="400">
-                    <h1>Test 123</h1>
+                    <p>Test 123</p>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
                 </div>
             </resizer-box>
