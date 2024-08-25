@@ -33,7 +33,7 @@ const { default: positions } = require("../../src/constants/positions");
 function changeBoxPositionX(position) {
   if (!position) return;
 
-  cy.get(`[name="horizontal"][value=${position}]`).check();
+  cy.get('select[name="horizontal"]').select(position);
 }
 
 Cypress.Commands.add("changeBoxPositionX", changeBoxPositionX);
@@ -45,7 +45,7 @@ Cypress.Commands.add("changeBoxPositionX", changeBoxPositionX);
 function changeBoxPositionY(position) {
   if (!position) return;
 
-  cy.get(`[name="vertical"][value=${position}]`).check();
+  cy.get('select[name="vertical"]').select(position);
 }
 
 Cypress.Commands.add("changeBoxPositionY", changeBoxPositionY);

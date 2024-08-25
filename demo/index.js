@@ -1,6 +1,6 @@
-function handleVerticalChange(radioElement) {
+function handleVerticalChange(e) {
   const resizerContainer = document.querySelector(".resizer-demo-container");
-  const verticalAlignment = radioElement.value;
+  const verticalAlignment = e.value;
 
   switch (verticalAlignment) {
     case "top":
@@ -20,9 +20,9 @@ function handleVerticalChange(radioElement) {
   }
 }
 
-function handleHorizontalChange(radioElement) {
+function handleHorizontalChange(e) {
   const resizerContainer = document.querySelector(".resizer-demo-container");
-  const horizontalAlignment = radioElement.value;
+  const horizontalAlignment = e.value;
 
   switch (horizontalAlignment) {
     case "left":

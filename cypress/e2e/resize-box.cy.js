@@ -30,11 +30,13 @@ describe("resizer-box component", () => {
         .should("exist");
       cy.get("resizer-box")
         .find('[slot="content"]')
-        .get("div.myBox h1")
+        .get("div.myBox p")
+        .first()
         .contains("Test 123");
       cy.get("resizer-box")
         .find('[slot="content"]')
         .get("div.myBox p")
+        .eq(1)
         .contains("Lorem Ipsum is simply dummy text");
     });
 

@@ -1,6 +1,7 @@
 html {
     height: 100%;
     font-family: system-ui;
+    color: #282828;
 }
 
 body {
@@ -15,7 +16,7 @@ body {
 }
 
 .dimensions-container {
-    margin-left: auto;
+    flex-direction: column;
 }
 
 .myBox {
@@ -32,13 +33,18 @@ body {
 
 .settings-container {
     display: flex;
-    margin-bottom: 20px;
+    align-items: center;
     gap: 12px;
+    border-bottom: 1px solid grey;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 fieldset.resizer-options {
     display: flex;
     gap: 20px;
+    flex-basis: 315px;
+    flex-shrink: 0;
 }
 
 .limitations-container label {
@@ -48,4 +54,62 @@ fieldset.resizer-options {
 .limitations-fieldset {
     display: flex;
     gap: 20px;
+}
+
+fieldset.box-position{
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+fieldset {
+    display: flex;
+    border-radius: 8px;
+    border-color: #a4a4a4;
+    border-image: none;
+    border-style: solid;
+    border-width: 2px;
+}
+
+fieldset legend {
+    font-size: 14px;
+    color: #484848;
+}
+
+.description {
+    max-width: 600px;
+}
+
+.description h1 {
+    margin: 8px 0px;
+}
+
+.description p {
+    margin-bottom: 8px;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+input, select {
+    margin-bottom: 8px;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.title-container .links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.divider {
+    width: 1px;
+    background-color: #a4a4a4;
+    height: 80px;
 }
