@@ -3,7 +3,7 @@ import defaultStyles from "./constants/defaultStyles.js";
 import positions from "./constants/positions.js";
 import ResizeObserverManager from "./resize-observer-manager/resize-observer-manager.mjs";
 import { isValueInPixels } from "./utils/utils.mjs";
-
+import templateHtml from './template.html';
 
 export class Resizer extends HTMLElement {
   #container = null;
@@ -52,93 +52,7 @@ export class Resizer extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
 
     const template = document.createElement("template");
-    template.innerHTML = `<div class="resizer" data-cy="resizer-container">
-            <style>
-            :host {
-                --box-width: 20px;
-                --box-overflow: calc(var(--box-width) / 2);
-            }            
-            
-            .resizer {
-                position: relative;
-            }
-            
-            .handle {
-                position: absolute;
-            }
-
-            .handle:hover {
-                background-color: #83c0e975;
-            }
-            
-            .handle.right {
-                cursor: col-resize;
-                width: var(--box-width);
-                height: 100%;
-                right: calc(-1 * var(--box-overflow));
-                top: 0;
-            }
-            
-            .handle.left {
-                cursor: col-resize;
-                width: var(--box-width);
-                height: 100%;
-                left: calc(-1 * var(--box-overflow));
-                top: 0;
-            }
-            
-            .handle.bottom {
-                cursor: row-resize;
-                height: var(--box-width);
-                width: 100%;
-                bottom: calc(-1 * var(--box-overflow));
-            }
-            
-            .handle.top {
-                cursor: row-resize;
-                height: var(--box-width);
-                width: 100%;
-                top: calc(-1 * var(--box-overflow));
-            }
-            
-            .handle.bottom-right {
-                z-index: 10;
-                cursor: se-resize;
-                height: var(--box-width);
-                width: var(--box-width);
-                bottom: calc(-1 * var(--box-overflow));
-                right: calc(-1 * var(--box-overflow));
-            }
-            
-            .handle.bottom-left {
-                z-index: 10;
-                cursor: sw-resize;
-                height: var(--box-width);
-                width: var(--box-width);
-                bottom: calc(-1 * var(--box-overflow));
-                left: calc(-1 * var(--box-overflow));
-            }
-            
-            .handle.top-left {
-                z-index: 10;
-                cursor: nw-resize;
-                height: var(--box-width);
-                width: var(--box-width);
-                top: calc(-1 * var(--box-overflow));
-                left: calc(-1 * var(--box-overflow));
-            }
-            
-            .handle.top-right {
-                z-index: 10;
-                cursor: ne-resize;
-                height: var(--box-width);
-                width: var(--box-width);
-                top: calc(-1 * var(--box-overflow));
-                right: calc(-1 * var(--box-overflow));
-            }
-            </style>
-            <slot name="content"></slot>
-        </div>`;
+    template.innerHTML =  templateHtml;
     shadow.appendChild(template.content.cloneNode(true));
 
     this.#container = shadow.querySelector(".resizer");

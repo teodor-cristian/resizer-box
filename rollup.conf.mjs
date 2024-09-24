@@ -1,4 +1,5 @@
 import terser from "@rollup/plugin-terser";
+import html from 'rollup-plugin-html';
 
 const pkgName = "resizer-box";
 
@@ -13,5 +14,13 @@ export default {
   },
   plugins: [
     terser(),
+    html({
+      include: '**/template.html',
+      htmlMinifierOptions: {
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        minifyCSS: true,
+      }
+    })
   ],
 };

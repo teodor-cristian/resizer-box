@@ -4,7 +4,7 @@ import { mouseEventsTests } from "./mouseEvents/mouseEventsTests";
 import { resizeEventTests } from "./resizeEventTests";
 
 // const URL = "http://localhost:6006/iframe.html?id=resizerbox-resizer-box--default&viewMode=story";
-const URL = "http://127.0.0.1:3003/demo/";
+const URL = "http://localhost:8000/demo/";
 
 describe("resizer-box component", () => {
   context("General usage", () => {

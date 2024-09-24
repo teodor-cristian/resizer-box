@@ -1,6 +1,6 @@
 {
   "name": "resizer-box",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "author": "Teo <teodor.cristian.s@gmail.com>",
   "license": "MIT",
   "description": "The resizer-box is a web component that helps you resize any HTML element in any direction you want.",
@@ -16,8 +16,7 @@
     "url": "https://github.com/teodor-cristian/resizer-box"
   },
   "scripts": {
-    "start:wds": "web-dev-server --open demo/ --node-resolve --watch",
-    "start": "live-server --open=./demo --port=3003 --cors",
+    "start": "web-dev-server",
     "start:build": "live-server --open=./lib --port=3003 --cors",
     "start:demo:build": "live-server --open=./demo-build --port=3007 --cors",
     "build": "rollup -c rollup.conf.mjs",
@@ -44,6 +43,7 @@
     "@storybook/web-components": "^8.1.9",
     "@storybook/web-components-webpack5": "^8.1.9",
     "@web/dev-server": "^0.4.6",
+    "@web/dev-server-rollup": "^0.6.4",
     "@web/rollup-plugin-html": "^2.3.0",
     "cypress": "^13.13.0",
     "eslint": "^9.8.0",
@@ -63,6 +63,7 @@
     "playwright-webkit": "^1.45.3",
     "prettier": "^3.3.3",
     "rollup": "^4.19.1",
+    "rollup-plugin-html": "^0.2.1",
     "storybook": "^8.1.9",
     "webpack": "^5.91.0"
   },
