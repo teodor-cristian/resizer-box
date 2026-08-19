@@ -3,3 +3,10 @@ export function isValueInPixels(value) {
 
   return regex.test(value);
 }
+
+export function clamp(value, min, max) {
+  if (max != null && value > max) return max;
+  if (min != null && value < min) return min;
+
+  return value;
+}

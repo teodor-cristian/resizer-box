@@ -6,3 +6,6 @@
 
 # Demo build
 /demo-build
+
+# Copilot
+.github/copilot-instructions.md

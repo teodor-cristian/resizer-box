@@ -49,18 +49,18 @@ const heightInput = document.querySelector("#height");
 resizeBox.addEventListener("resize", (e) => {
   const { width, height } = e.detail;
 
-  widthInput.value = width;
-  heightInput.value = height;
+  widthInput.value = `${width}px`;
+  heightInput.value = `${height}px`;
 });
 
 widthInput.addEventListener("input", (e) => {
   const newWidth = e.target.value;
-  resizeBox.setAttribute("width", `${newWidth}px`);
+  resizeBox.setAttribute("width", newWidth);
 });
 
 heightInput.addEventListener("input", (e) => {
   const newHeight = e.target.value;
-  resizeBox.setAttribute("height", `${newHeight}px`);
+  resizeBox.setAttribute("height", newHeight);
 });
 
 function handleResizeOptChange(checkboxElement) {
