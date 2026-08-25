@@ -43,5 +43,36 @@ export function resizeEventTests(url) {
           });
       });
     });
+
+    it("should stop resizing after the pointer is canceled", () => {
+      const pointerId = Cypress.browser.name === "firefox" ? 0 : 1;
+
+      cy.get("resizer-box")
+        .shadow()
+        .find(`[data-cy="handle-${POSITIONS.RIGHT}"]`)
+        .as("rightHandle");
+
+      cy.get("@rightHandle")
+        .trigger("pointerdown", { pointerId })
+        .trigger("pointermove", { pointerId, clientX: 500, clientY: 0 });
+
+      cy.get("resizer-box")
+        .shadow()
+        .find('[data-cy="resizer-container"]')
+        .invoke("width")
+        .as("widthAfterMove");
+
+      cy.get("@rightHandle")
+        .trigger("pointercancel", { pointerId })
+        .trigger("pointermove", { pointerId, clientX: 700, clientY: 0 });
+
+      cy.get("@widthAfterMove").then((widthAfterMove) => {
+        cy.get("resizer-box")
+          .shadow()
+          .find('[data-cy="resizer-container"]')
+          .invoke("width")
+          .should("equal", widthAfterMove);
+      });
+    });
   });
 }

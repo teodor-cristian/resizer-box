@@ -1,13 +1,13 @@
 import attributes from "./constants/attributes.js";
-import defaultStyles from "./constants/defaultStyles.js";
 import positions from "./constants/positions.js";
 import ResizeObserverManager from "./resize-observer-manager/resize-observer-manager.mjs";
-import { isValueInPixels } from "./utils/utils.mjs";
-import templateHtml from './template.html';
+import { isValueInPixels, clamp } from "./utils/utils.mjs";
+import templateHtml from "./template.html";
 
 export class Resizer extends HTMLElement {
   #container = null;
   #resizeObserver = null;
+  #isValid = false;
 
   static observedAttributes = [
     attributes.WIDTH,
@@ -52,43 +52,22 @@ export class Resizer extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
 
     const template = document.createElement("template");
-    template.innerHTML =  templateHtml;
+    template.innerHTML = templateHtml;
     shadow.appendChild(template.content.cloneNode(true));
 
     this.#container = shadow.querySelector(".resizer");
 
-    // For tracking the changes
-    this.#resizeObserver = new ResizeObserverManager(
-      this.#container,
-      (detail) => this.dispatch("resize", detail),
-    );
-    this.#resizeObserver.subscribe();
-
     const width = this.getAttribute(attributes.WIDTH);
-    if (width && isValueInPixels(width)) {
-      this.#container.style.width = width;
-    } else {
-      this.#container.style.width = defaultStyles.width;
-      console.error(
-        `Please set a ${attributes.WIDTH} attribute to the resizer tag.`,
-      );
-    }
-
     const height = this.getAttribute(attributes.HEIGHT);
-    if (height && isValueInPixels(height)) {
-      this.#container.style.height = height;
-    } else {
-      this.#container.style.height = defaultStyles.height;
-      console.error(
-        `Please set a ${attributes.HEIGHT} attribute to the resizer tag.`,
-      );
-    }
+    this._setContainerDimensions(width, height);
 
     this._addResizeHandles();
   }
 
   disconnectedCallback() {
-    this.#resizeObserver.unsubscribe();
+    if (this.#resizeObserver) {
+      this.#resizeObserver.unsubscribe();
+    }
   }
 
   attributeChangedCallback(attributeName, oldValue, newValue) {
@@ -98,17 +77,75 @@ export class Resizer extends HTMLElement {
       attributeName === attributes.WIDTH ||
       attributeName === attributes.HEIGHT
     ) {
-      this.#container.style[attributeName] = newValue;
+      let newWidth =
+        attributeName === attributes.WIDTH
+          ? newValue
+          : this.getAttribute(attributes.WIDTH);
+      let newHeight =
+        attributeName === attributes.HEIGHT
+          ? newValue
+          : this.getAttribute(attributes.HEIGHT);
+
+      this._setContainerDimensions(newWidth, newHeight);
       return;
     }
 
-    if (Resizer.observedAttributes.includes(attributeName)) {
+    if (Resizer.observedAttributes.includes(attributeName) && this.#isValid) {
       if (this.attributeIsValid(attributeName)) {
         this.handlesAddMethodMap[attributeName].call(this);
       } else {
         this._removeResizeHandle(this.attributesToPositionMap[attributeName]);
       }
     }
+  }
+
+  #_setValidity(newVal) {
+    if (this.#isValid === newVal) return;
+
+    this.#isValid = newVal;
+
+    if (this.#isValid) {
+      // For tracking the changes
+      this.#resizeObserver = new ResizeObserverManager(
+        this.#container,
+        (detail) => this.dispatch("resize", detail),
+      );
+      this.#resizeObserver.subscribe();
+
+      this._addResizeHandles();
+    } else {
+      this._removeAllHandles();
+
+      if (this.#resizeObserver) {
+        this.#resizeObserver.unsubscribe();
+      }
+    }
+  }
+
+  _setContainerDimensions(width, height) {
+    let validWidth = false;
+    let validHeight = false;
+
+    if (width && isValueInPixels(width)) {
+      this.#container.style.width = width;
+      validWidth = true;
+    } else {
+      console.error(
+        `resizer-box: Missing required attributes: Please set a valid ${attributes.WIDTH} attribute to the resizer tag. Usage: <resizer-box width='300px' height='200px'>`,
+      );
+    }
+
+    if (height && isValueInPixels(height)) {
+      this.#container.style.height = height;
+      validHeight = true;
+    } else {
+      console.error(
+        `resizer-box: Missing required attributes: Please set a valid ${attributes.HEIGHT} attribute to the resizer tag. Usage: <resizer-box width='300px' height='200px'>`,
+      );
+    }
+
+    const computedValidity = validHeight && validWidth;
+    this.#_setValidity(computedValidity);
   }
 
   dispatch(type, detail) {
@@ -123,28 +160,28 @@ export class Resizer extends HTMLElement {
 
   get maxWidth() {
     const max = this.getAttribute(attributes.MAX_WIDTH);
-    if (!isValueInPixels(max)) return 0;
+    if (!isValueInPixels(max)) return null;
 
     return parseInt(max, 10);
   }
 
   get minWidth() {
     const min = this.getAttribute(attributes.MIN_WIDTH);
-    if (!isValueInPixels(min)) return 0;
+    if (!isValueInPixels(min)) return null;
 
     return parseInt(min, 10);
   }
 
   get maxHeight() {
     const max = this.getAttribute(attributes.MAX_HEIGHT);
-    if (!isValueInPixels(max)) return 0;
+    if (!isValueInPixels(max)) return null;
 
     return parseInt(max, 10);
   }
 
   get minHeight() {
     const min = this.getAttribute(attributes.MIN_HEIGHT);
-    if (!isValueInPixels(min)) return 0;
+    if (!isValueInPixels(min)) return null;
 
     return parseInt(min, 10);
   }
@@ -165,6 +202,8 @@ export class Resizer extends HTMLElement {
   }
 
   _addResizeHandles() {
+    if (!this.#isValid) return;
+
     for (const [attributeName, addHandle] of Object.entries(
       this.handlesAddMethodMap,
     )) {
@@ -174,18 +213,32 @@ export class Resizer extends HTMLElement {
     }
   }
 
+  _removeAllHandles() {
+    this.#container
+      .querySelectorAll(".handle")
+      .forEach((handle) => handle.remove());
+  }
+
   _removeResizeHandle(position) {
-    const handle = this.#container.querySelector(
-      `.handle.${position}`,
-    );
+    const handle = this.#container.querySelector(`.handle.${position}`);
+    if (!handle) return;
 
     this.#container.removeChild(handle);
   }
 
   _createHandle(position) {
-    let handleHtml = `<div class='handle ${position}' part='handle handle-${position}' data-cy='handle-${position}'></div>`;
-    this.#container.insertAdjacentHTML("beforeend", handleHtml);
-    const handle = this.#container.querySelector(`.handle.${position}`);
+    const existingHandle = this.#container.querySelector(`.handle.${position}`);
+
+    if (existingHandle) {
+      return existingHandle;
+    }
+
+    const handle = document.createElement("div");
+    handle.classList.add("handle", position);
+    handle.setAttribute("part", `handle handle-${position}`);
+    handle.setAttribute("data-cy", `handle-${position}`);
+
+    this.#container.appendChild(handle);
 
     return handle;
   }
@@ -203,10 +256,15 @@ export class Resizer extends HTMLElement {
       rightHandle.onpointermove = (e) =>
         this._setWidth(e.clientX, shiftX, "right");
 
-      rightHandle.onpointerup = () => {
-        rightHandle.onpointermove = null;
-        rightHandle.onpointerup = null;
-      };
+      rightHandle.onpointerup =
+        rightHandle.onpointercancel =
+        rightHandle.onlostpointercapture =
+          () => {
+            rightHandle.onpointermove = null;
+            rightHandle.onpointerup = null;
+            rightHandle.onpointercancel = null;
+            rightHandle.onlostpointercapture = null;
+          };
     };
 
     rightHandle.onpointerdown = onDrag;
@@ -227,10 +285,15 @@ export class Resizer extends HTMLElement {
       leftHandle.onpointermove = (e) =>
         this._setWidth(e.clientX, shiftX, "left");
 
-      leftHandle.onpointerup = () => {
-        leftHandle.onpointermove = null;
-        leftHandle.onpointerup = null;
-      };
+      leftHandle.onpointerup =
+        leftHandle.onpointercancel =
+        leftHandle.onlostpointercapture =
+          () => {
+            leftHandle.onpointermove = null;
+            leftHandle.onpointerup = null;
+            leftHandle.onpointercancel = null;
+            leftHandle.onlostpointercapture = null;
+          };
     };
 
     leftHandle.onpointerdown = onDrag;
@@ -251,10 +314,15 @@ export class Resizer extends HTMLElement {
       bottomHandle.onpointermove = (e) =>
         this._setHeight(e.clientY, shiftY, "bottom");
 
-      bottomHandle.onpointerup = () => {
-        bottomHandle.onpointermove = null;
-        bottomHandle.onpointerup = null;
-      };
+      bottomHandle.onpointerup =
+        bottomHandle.onpointercancel =
+        bottomHandle.onlostpointercapture =
+          () => {
+            bottomHandle.onpointermove = null;
+            bottomHandle.onpointerup = null;
+            bottomHandle.onpointercancel = null;
+            bottomHandle.onlostpointercapture = null;
+          };
     };
 
     bottomHandle.onpointerdown = onDrag;
@@ -275,10 +343,15 @@ export class Resizer extends HTMLElement {
       topHandle.onpointermove = (e) =>
         this._setHeight(e.clientY, shiftY, "top");
 
-      topHandle.onpointerup = () => {
-        topHandle.onpointermove = null;
-        topHandle.onpointerup = null;
-      };
+      topHandle.onpointerup =
+        topHandle.onpointercancel =
+        topHandle.onlostpointercapture =
+          () => {
+            topHandle.onpointermove = null;
+            topHandle.onpointerup = null;
+            topHandle.onpointercancel = null;
+            topHandle.onlostpointercapture = null;
+          };
     };
 
     topHandle.onpointerdown = onDrag;
@@ -304,10 +377,15 @@ export class Resizer extends HTMLElement {
         this._setHeight(e.clientY, shiftY, "bottom");
       };
 
-      bottomRightHandle.onpointerup = () => {
-        bottomRightHandle.onpointermove = null;
-        bottomRightHandle.onpointerup = null;
-      };
+      bottomRightHandle.onpointerup =
+        bottomRightHandle.onpointercancel =
+        bottomRightHandle.onlostpointercapture =
+          () => {
+            bottomRightHandle.onpointermove = null;
+            bottomRightHandle.onpointerup = null;
+            bottomRightHandle.onpointercancel = null;
+            bottomRightHandle.onlostpointercapture = null;
+          };
     };
 
     bottomRightHandle.onpointerdown = onDrag;
@@ -333,10 +411,15 @@ export class Resizer extends HTMLElement {
         this._setHeight(e.clientY, shiftY, "bottom");
       };
 
-      bottomLeftHandle.onpointerup = () => {
-        bottomLeftHandle.onpointermove = null;
-        bottomLeftHandle.onpointerup = null;
-      };
+      bottomLeftHandle.onpointerup =
+        bottomLeftHandle.onpointercancel =
+        bottomLeftHandle.onlostpointercapture =
+          () => {
+            bottomLeftHandle.onpointermove = null;
+            bottomLeftHandle.onpointerup = null;
+            bottomLeftHandle.onpointercancel = null;
+            bottomLeftHandle.onlostpointercapture = null;
+          };
     };
 
     bottomLeftHandle.onpointerdown = onDrag;
@@ -360,10 +443,15 @@ export class Resizer extends HTMLElement {
         this._setHeight(e.clientY, shiftY, "top");
       };
 
-      topLeftHandle.onpointerup = () => {
-        topLeftHandle.onpointermove = null;
-        topLeftHandle.onpointerup = null;
-      };
+      topLeftHandle.onpointerup =
+        topLeftHandle.onpointercancel =
+        topLeftHandle.onlostpointercapture =
+          () => {
+            topLeftHandle.onpointermove = null;
+            topLeftHandle.onpointerup = null;
+            topLeftHandle.onpointercancel = null;
+            topLeftHandle.onlostpointercapture = null;
+          };
     };
 
     topLeftHandle.onpointerdown = onDrag;
@@ -389,10 +477,15 @@ export class Resizer extends HTMLElement {
         this._setHeight(e.clientY, shiftY, "top");
       };
 
-      topRightHandle.onpointerup = () => {
-        topRightHandle.onpointermove = null;
-        topRightHandle.onpointerup = null;
-      };
+      topRightHandle.onpointerup =
+        topRightHandle.onpointercancel =
+        topRightHandle.onlostpointercapture =
+          () => {
+            topRightHandle.onpointermove = null;
+            topRightHandle.onpointerup = null;
+            topRightHandle.onpointercancel = null;
+            topRightHandle.onlostpointercapture = null;
+          };
     };
 
     topRightHandle.onpointerdown = onDrag;
@@ -418,13 +511,7 @@ export class Resizer extends HTMLElement {
       this.#container.getBoundingClientRect()[clientRectMapper[direction]];
     newHeight = direction === "top" ? -newHeight : newHeight;
 
-    if (this.maxHeight && newHeight >= this.maxHeight) {
-      newHeight = this.maxHeight;
-    }
-
-    if (this.minHeight && newHeight <= this.minHeight) {
-      newHeight = this.minHeight;
-    }
+    newHeight = clamp(newHeight, this.minHeight, this.maxHeight);
 
     this.#container.style.height = `${newHeight}px`;
   };
@@ -447,13 +534,7 @@ export class Resizer extends HTMLElement {
       this.#container.getBoundingClientRect()[clientRectMapper[direction]];
     newWidth = direction === "left" ? -newWidth : newWidth;
 
-    if (this.maxWidth && newWidth >= this.maxWidth) {
-      newWidth = this.maxWidth;
-    }
-
-    if (this.minWidth && newWidth <= this.minWidth) {
-      newWidth = this.minWidth;
-    }
+    newWidth = clamp(newWidth, this.minWidth, this.maxWidth);
 
     this.#container.style.width = `${newWidth}px`;
   };
