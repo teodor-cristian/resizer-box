@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
 
+permissions:
+    id-token: write
+    contents: read
+
 jobs:
     release:
         name: 🚀 release
@@ -14,9 +18,7 @@ jobs:
             - name: 🟢 node
               uses: actions/setup-node@v4
               with:
-                  node-version: 21.7.1
+                  node-version: 22.14.0
                   registry-url: https://registry.npmjs.org
             - name: 🚀 publish
               run: npm publish --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
