@@ -21,4 +21,4 @@ jobs:
                   node-version: 22.14.0
                   registry-url: https://registry.npmjs.org
             - name: 🚀 publish
-              run: npm publish --access public
+              run: npm publish --access public --provenance
